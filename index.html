@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build It | بيلديت — من الصفر إلى المفتاح</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'kufi': ['Noto Kufi Arabic', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: { 900: '#0a1628', 800: '#0d1f3c', 700: '#112a4a', 600: '#15355a' },
+                        brand: { green: '#22c55e', greenDark: '#16a34a', greenLight: '#4ade80', blue: '#1e40af', blueLight: '#3b82f6', blueDark: '#1e3a5f' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0a1628; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #22c55e, #1e40af); border-radius: 3px; }
+        html { scroll-behavior: smooth; }
+        body { background: #0a1628; color: #e2e8f0; }
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); }
+        .glass-nav { background: rgba(10,22,40,0.88); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .brand-gradient { background: linear-gradient(135deg, #22c55e, #4ade80, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .brand-bg { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .brand-bg-blue { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+        .brand-mixed-bg { background: linear-gradient(135deg, #22c55e, #1e40af); }
+        .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(34,197,94,0.25), rgba(30,64,175,0.25), transparent); }
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.9s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-left { opacity: 0; transform: translateX(-60px); transition: all 0.9s cubic-bezier(0.16,1,0.3,1); }
+        .reveal-left.active { opacity: 1; transform: translateX(0); }
+        .reveal-right { opacity: 0; transform: translateX(60px); transition: all 0.9s cubic-bezier(0.16,1,0.3,1); }
+        .reveal-right.active { opacity: 1; transform: translateX(0); }
+        .reveal-scale { opacity: 0; transform: scale(0.88); transition: all 1s cubic-bezier(0.16,1,0.3,1); }
+        .reveal-scale.active { opacity: 1; transform: scale(1); }
+        .service-card { transition: all 0.5s cubic-bezier(0.16,1,0.3,1); }
+        .service-card:hover { transform: translateY(-10px) scale(1.02); border-color: rgba(34,197,94,0.25); box-shadow: 0 25px 60px rgba(34,197,94,0.06), 0 0 0 1px rgba(34,197,94,0.1); }
+        .service-card:hover .svc-icon { background: linear-gradient(135deg, #22c55e, #3b82f6); box-shadow: 0 8px 30px rgba(34,197,94,0.25); }
+        .service-card:hover .svc-icon .iconify { color: white !important; }
+        .problem-card { transition: all 0.4s ease; }
+        .problem-card:hover { border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.03); }
+        .problem-card:hover .prob-icon { color: #ef4444 !important; }
+        .solution-step { transition: all 0.4s ease; }
+        .solution-step:hover { background: rgba(34,197,94,0.05); border-color: rgba(34,197,94,0.2); }
+        .partner-card { transition: all 0.5s ease; }
+        .partner-card:hover { transform: translateY(-6px); border-color: rgba(59,130,246,0.3); box-shadow: 0 20px 50px rgba(59,130,246,0.08); }
+        .btn-brand { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: 600; position: relative; overflow: hidden; transition: all 0.3s; }
+        .btn-brand::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, #16a34a, #1e40af); opacity: 0; transition: opacity 0.3s; }
+        .btn-brand:hover::before { opacity: 1; }
+        .btn-brand span { position: relative; z-index: 1; }
+        .btn-outline { border: 1px solid rgba(34,197,94,0.35); color: #4ade80; transition: all 0.3s; }
+        .btn-outline:hover { background: rgba(34,197,94,0.1); border-color: #22c55e; }
+        .glow-green { position: absolute; width: 500px; height: 500px; border-radius: 50%; background: #22c55e; filter: blur(180px); opacity: 0.05; pointer-events: none; }
+        .glow-blue { position: absolute; width: 500px; height: 500px; border-radius: 50%; background: #3b82f6; filter: blur(180px); opacity: 0.04; pointer-events: none; }
+        .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+        .particle { position: absolute; border-radius: 50%; animation: floatUp linear infinite; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.6; } 90% { opacity: 0.6; } 100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(35px); } to { opacity: 1; transform: translateY(0); } }
+        .anim { opacity: 0; animation: fadeInUp 1s cubic-bezier(0.16,1,0.3,1) forwards; }
+        .d1 { animation-delay: .1s } .d2 { animation-delay: .2s } .d3 { animation-delay: .3s } .d4 { animation-delay: .4s } .d5 { animation-delay: .5s } .d6 { animation-delay: .6s } .d7 { animation-delay: .7s }
+        .whatsapp-float { position: fixed; bottom: 26px; left: 26px; z-index: 999; width: 58px; height: 58px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 24px rgba(37,211,102,0.4); transition: all 0.3s; animation: wpPulse 2s ease-in-out infinite; }
+        .whatsapp-float:hover { transform: scale(1.12); box-shadow: 0 6px 30px rgba(37,211,102,0.55); }
+        @keyframes wpPulse { 0%,100% { box-shadow: 0 4px 24px rgba(37,211,102,0.4); } 50% { box-shadow: 0 4px 30px rgba(37,211,102,0.6), 0 0 0 12px rgba(37,211,102,0.08); } }
+        .lang-btn { transition: all 0.2s; }
+        .lang-btn.active { background: rgba(34,197,94,0.15); color: #4ade80; }
+        .mobile-menu { transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+        [dir="ltr"] .mobile-menu { transform: translateX(100%); }
+        .mobile-menu.open { transform: translateX(0) !important; }
+        .toast { transform: translateY(100px); opacity: 0; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .hero-grid { position: absolute; inset: 0; opacity: 0.025; background-image: linear-gradient(rgba(34,197,94,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.5) 1px, transparent 1px); background-size: 80px 80px; }
+        .logo-img { height: 40px; width: auto; }
+        @keyframes rotateSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .rotate-slow { animation: rotateSlow 30s linear infinite; }
+        .stat-num { font-variant-numeric: tabular-nums; }
+        .consult-btn { position: relative; overflow: hidden; }
+        .consult-btn::after { content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; border-radius: 50%; background: rgba(255,255,255,0.15); transform: translate(-50%,-50%); transition: width 0.5s, height 0.5s; }
+        .consult-btn:hover::after { width: 300px; height: 300px; }
+    </style>
+</head>
+<body class="font-kufi overflow-x-hidden relative">
+
+<div class="particles" id="particles"></div>
+
+<!-- ========== NAVIGATION ========== -->
+<nav class="glass-nav fixed top-0 left-0 right-0 z-50 h-16 lg:h-20" id="navbar">
+    <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <a href="#hero" class="flex items-center gap-3 group">
+            <img src="https://z-cdn-media.chatglm.cn/files/8809be51-f2b2-4478-8c37-6072b16c5c42.png?auth_key=1876898942-b89076bee84542f7877636c35e962dc1-0-7b17550daed1adb4fd0a3291bc36e367" alt="Build It" class="logo-img transition-transform group-hover:scale-105">
+        </a>
+        <div class="hidden lg:flex items-center gap-7">
+            <a href="#hero" class="text-sm text-gray-400 hover:text-brand-green transition-colors" data-i18n="nav_home">الرئيسية</a>
+            <a href="#about" class="text-sm text-gray-400 hover:text-brand-green transition-colors" data-i18n="nav_about">عن بيلديت</a>
+            <a href="#problems" class="text-sm text-gray-400 hover:text-brand-green transition-colors" data-i18n="nav_problems">المشاكل</a>
+            <a href="#services" class="text-sm text-gray-400 hover:text-brand-green transition-colors" data-i18n="nav_services">خدماتنا</a>
+            <a href="#partners" class="text-sm text-gray-400 hover:text-brand-green transition-colors" data-i18n="nav_partners">الشراكات</a>
+            <a href="#contact" class="text-sm text-gray-400 hover:text-brand-green transition-colors" data-i18n="nav_contact">تواصل</a>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="hidden sm:flex items-center glass rounded-full p-1 gap-0.5">
+                <button onclick="setLang('ar')" class="lang-btn active text-xs px-3 py-1.5 rounded-full" data-lang="ar">عربي</button>
+                <button onclick="setLang('fr')" class="lang-btn text-xs px-3 py-1.5 rounded-full text-gray-400" data-lang="fr">FR</button>
+                <button onclick="setLang('en')" class="lang-btn text-xs px-3 py-1.5 rounded-full text-gray-400" data-lang="en">EN</button>
+            </div>
+            <a href="https://wa.me/213549333904" target="_blank" class="hidden md:flex consult-btn btn-brand rounded-full px-6 py-2.5 text-sm">
+                <span class="flex items-center gap-2">
+                    <span class="iconify" data-icon="mdi:whatsapp"></span>
+                    <span data-i18n="nav_consult">استشارة</span>
+                </span>
+            </a>
+            <button onclick="toggleMenu()" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl glass">
+                <span class="iconify text-xl text-gray-300" data-icon="mdi:menu"></span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu fixed inset-0 z-[60] bg-navy-900/98 backdrop-blur-2xl flex flex-col" id="mobileMenu">
+    <div class="flex items-center justify-between px-4 h-16">
+        <img src="https://z-cdn-media.chatglm.cn/files/8809be51-f2b2-4478-8c37-6072b16c5c42.png?auth_key=1876898942-b89076bee84542f7877636c35e962dc1-0-7b17550daed1adb4fd0a3291bc36e367" alt="Build It" class="h-9">
+        <button onclick="toggleMenu()" class="w-10 h-10 flex items-center justify-center rounded-xl glass">
+            <span class="iconify text-xl text-gray-300" data-icon="mdi:close"></span>
+        </button>
+    </div>
+    <div class="flex flex-col items-center justify-center flex-1 gap-6">
+        <a onclick="toggleMenu()" href="#hero" class="text-2xl font-light text-gray-300 hover:text-brand-greenLight transition-colors" data-i18n="nav_home">الرئيسية</a>
+        <a onclick="toggleMenu()" href="#about" class="text-2xl font-light text-gray-300 hover:text-brand-greenLight transition-colors" data-i18n="nav_about">عن بيلديت</a>
+        <a onclick="toggleMenu()" href="#problems" class="text-2xl font-light text-gray-300 hover:text-brand-greenLight transition-colors" data-i18n="nav_problems">المشاكل</a>
+        <a onclick="toggleMenu()" href="#services" class="text-2xl font-light text-gray-300 hover:text-brand-greenLight transition-colors" data-i18n="nav_services">خدماتنا</a>
+        <a onclick="toggleMenu()" href="#partners" class="text-2xl font-light text-gray-300 hover:text-brand-greenLight transition-colors" data-i18n="nav_partners">الشراكات</a>
+        <a onclick="toggleMenu()" href="#contact" class="text-2xl font-light text-gray-300 hover:text-brand-greenLight transition-colors" data-i18n="nav_contact">تواصل</a>
+        <div class="flex gap-2 mt-4">
+            <button onclick="setLang('ar');toggleMenu()" class="text-sm px-4 py-2 rounded-full glass text-gray-400 hover:text-brand-greenLight">عربي</button>
+            <button onclick="setLang('fr');toggleMenu()" class="text-sm px-4 py-2 rounded-full glass text-gray-400 hover:text-brand-greenLight">FR</button>
+            <button onclick="setLang('en');toggleMenu()" class="text-sm px-4 py-2 rounded-full glass text-gray-400 hover:text-brand-greenLight">EN</button>
+        </div>
+        <a href="https://wa.me/213549333904" target="_blank" class="btn-brand rounded-full px-8 py-3 mt-4">
+            <span class="flex items-center gap-2">
+                <span class="iconify" data-icon="mdi:whatsapp"></span>
+                <span data-i18n="nav_consult">استشارة</span>
+            </span>
+        </a>
+    </div>
+</div>
+
+<!-- ========== HERO ========== -->
+<section id="hero" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+    <div class="hero-grid"></div>
+    <div class="glow-green" style="top:-200px;right:-200px"></div>
+    <div class="glow-blue" style="bottom:-200px;left:-200px"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="text-center lg:text-start order-2 lg:order-1">
+                <div class="anim">
+                    <span class="inline-flex items-center gap-2 glass rounded-full px-4 py-2 text-xs text-brand-greenLight mb-6">
+                        <span class="w-2 h-2 bg-brand-green rounded-full animate-pulse"></span>
+                        <span data-i18n="hero_badge">مؤسسة ناشئة مبتكرة في الجزائر</span>
+                    </span>
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-[1.1] mb-6 anim d1">
+                    <span data-i18n="hero_t1">من الصفر</span><br>
+                    <span class="brand-gradient" data-i18n="hero_t2">إلى المفتاح</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-400 font-light leading-relaxed mb-4 anim d2" data-i18n="hero_sub">
+                    Build It — حلول متكاملة في الإنشاء والتعمير والاستثمار العقاري
+                </p>
+                <p class="text-base text-gray-500 font-light leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0 anim d3" data-i18n="hero_desc">
+                    بدل التعامل مع عدة أطراف، تعامل مع جهة واحدة. عقود قانونية، فواتير رسمية، وجدول دفعات شفاف.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start anim d4">
+                    <a href="https://wa.me/213549333904" target="_blank" class="btn-brand rounded-full px-8 py-4 text-sm w-full sm:w-auto text-center">
+                        <span class="flex items-center justify-center gap-2">
+                            <span class="iconify text-lg" data-icon="mdi:whatsapp"></span>
+                            <span data-i18n="hero_cta1">تواصل الآن</span>
+                        </span>
+                    </a>
+                    <a href="#services" class="btn-outline rounded-full px-8 py-4 text-sm w-full sm:w-auto text-center">
+                        <span class="flex items-center justify-center gap-2" data-i18n="hero_cta2">
+                            اكتشف خدماتنا
+                            <span class="iconify" data-icon="mdi:arrow-left"></span>
+                        </span>
+                    </a>
+                </div>
+                <div class="grid grid-cols-3 gap-6 mt-12 anim d5">
+                    <div class="text-center lg:text-start">
+                        <div class="text-3xl font-bold brand-gradient stat-num" data-count="100">0</div>
+                        <div class="text-xs text-gray-500 mt-1" data-i18n="s_projects">مشروع مُنجز</div>
+                    </div>
+                    <div class="text-center lg:text-start">
+                        <div class="text-3xl font-bold brand-gradient stat-num" data-count="350">0</div>
+                        <div class="text-xs text-gray-500 mt-1" data-i18n="s_clients">عميل راضٍ</div>
+                    </div>
+                    <div class="text-center lg:text-start">
+                        <div class="text-3xl font-bold brand-gradient stat-num" data-count="100">0</div>
+                        <div class="text-xs text-gray-500 mt-1" data-i18n="s_satisfaction">% رضا العملاء</div>
+                    </div>
+                </div>
+            </div>
+            <div class="order-1 lg:order-2 flex justify-center anim d2">
+                <div class="relative">
+                    <div class="w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-2 border-brand-green/20 relative z-10" style="box-shadow: 0 0 80px rgba(34,197,94,0.1);">
+                        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&h=600&fit=crop" alt="Construction" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-transparent"></div>
+                    </div>
+                    <div class="absolute -inset-4 rounded-full border border-brand-green/5 rotate-slow"></div>
+                    <div class="absolute -inset-10 rounded-full border border-brand-blue/5 rotate-slow" style="animation-direction:reverse;animation-duration:40s"></div>
+                    <div class="absolute -bottom-3 -right-3 lg:-right-6 glass rounded-2xl px-4 py-3 z-20 anim d6">
+                        <div class="flex items-center gap-2">
+                            <span class="iconify text-brand-green text-xl" data-icon="mdi:shield-check"></span>
+                            <div>
+                                <div class="text-xs font-semibold text-white" data-i18n="badge_title">عقود قانونية</div>
+                                <div class="text-[10px] text-gray-400" data-i18n="badge_sub">فواتير رسمية</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute -top-3 -left-3 lg:-left-6 glass rounded-2xl px-4 py-3 z-20 anim d7">
+                        <div class="flex items-center gap-2">
+                            <span class="iconify text-brand-blueLight text-xl" data-icon="mdi:file-document-check-outline"></span>
+                            <div>
+                                <div class="text-xs font-semibold text-white" data-i18n="badge2_title">جدول دفعات</div>
+                                <div class="text-[10px] text-gray-400" data-i18n="badge2_sub">شفاف ومحدد</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 anim d7">
+        <span class="text-[10px] text-gray-500 tracking-widest uppercase" data-i18n="scroll">اكتشف المزيد</span>
+        <div class="w-5 h-8 rounded-full border border-gray-600 flex justify-center pt-1.5">
+            <div class="w-1 h-2 bg-brand-green rounded-full animate-bounce"></div>
+        </div>
+    </div>
+</section>
+
+<div class="divider mx-auto max-w-5xl"></div>
+
+<!-- ========== ABOUT ========== -->
+<section id="about" class="py-24 lg:py-32 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="reveal-left">
+                <div class="relative rounded-3xl overflow-hidden aspect-[4/3]">
+                    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop" alt="Building" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/30 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6">
+                        <div class="glass rounded-2xl p-4 flex items-center gap-4">
+                            <img src="https://z-cdn-media.chatglm.cn/files/8809be51-f2b2-4478-8c37-6072b16c5c42.png?auth_key=1876898942-b89076bee84542f7877636c35e962dc1-0-7b17500daed1adb4fd0a3291bc36e367" alt="Build It" class="h-12 rounded-lg" onerror="this.style.display='none'">
+                            <div>
+                                <div class="text-sm font-bold text-white">Build It</div>
+                                <div class="text-xs text-gray-400" data-i18n="about_card_sub">إنشاء • تعمير • استثمار</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -top-4 -right-4 w-24 h-24 border border-brand-green/15 rounded-2xl -z-10"></div>
+                <div class="absolute -bottom-4 -left-4 w-32 h-32 border border-brand-blue/10 rounded-3xl -z-10"></div>
+            </div>
+            <div class="reveal-right">
+                <span class="inline-block text-xs text-brand-greenLight tracking-widest uppercase mb-4" data-i18n="about_label">عن بيلديت</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-6 leading-tight">
+                    <span data-i18n="about_t1">نغيّر طريقة</span><br>
+                    <span class="brand-gradient" data-i18n="about_t2">إدارة البناء في الجزائر</span>
+                </h2>
+                <p class="text-gray-400 font-light leading-relaxed mb-6" data-i18n="about_p1">
+                    Build It هي مؤسسة ناشئة مبتكرة في مجال الإنشاء والتعمير والاستثمار العقاري، تقدّم حلولًا متكاملة من الصفر إلى المفتاح، موجّهة لأصحاب المنازل العاديين، المستثمرين، والمُرقّين العقاريين.
+                </p>
+                <p class="text-gray-500 font-light leading-relaxed mb-8" data-i18n="about_p2">
+                    الابتكار في Build It ليس في البناء، بل في نموذج العمل: دمج خدمات مشتتة في حل موحّد، وتحويل البناء إلى مشروع يُدار كاستثمار.
+                </p>
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="glass rounded-2xl p-4 text-center">
+                        <span class="iconify text-brand-green text-2xl mb-2" data-icon="mdi:puzzle-outline"></span>
+                        <div class="text-sm font-medium text-white" data-i18n="af1">حل موحّد</div>
+                        <div class="text-[11px] text-gray-500" data-i18n="af1d">كل الخدمات في مكان واحد</div>
+                    </div>
+                    <div class="glass rounded-2xl p-4 text-center">
+                        <span class="iconify text-brand-blueLight text-2xl mb-2" data-icon="mdi:chart-line"></span>
+                        <div class="text-sm font-medium text-white" data-i18n="af2">استثمار ذكي</div>
+                        <div class="text-[11px] text-gray-500" data-i18n="af2d">البناء كفرصة استثمارية</div>
+                    </div>
+                    <div class="glass rounded-2xl p-4 text-center">
+                        <span class="iconify text-brand-green text-2xl mb-2" data-icon="mdi:eye-outline"></span>
+                        <div class="text-sm font-medium text-white" data-i18n="af3">شفافية كاملة</div>
+                        <div class="text-[11px] text-gray-500" data-i18n="af3d">توثيق كل خطوة</div>
+                    </div>
+                    <div class="glass rounded-2xl p-4 text-center">
+                        <span class="iconify text-brand-blueLight text-2xl mb-2" data-icon="mdi:handshake-outline"></span>
+                        <div class="text-sm font-medium text-white" data-i18n="af4">شراكات مؤسسية</div>
+                        <div class="text-[11px] text-gray-500" data-i18n="af4d">قطاع التربية والدفاع</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider mx-auto max-w-5xl"></div>
+
+<!-- ========== PROBLEMS ========== -->
+<section id="problems" class="py-24 lg:py-32 relative">
+    <div class="glow-blue" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+            <span class="inline-block text-xs text-red-400 tracking-widest uppercase mb-4" data-i18n="prob_label">المشاكل الحقيقية</span>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+                <span data-i18n="prob_t1">مشاكل يعاني منها</span>
+                <span class="text-red-400" data-i18n="prob_t2"> كل من يبني</span>
+            </h2>
+            <p class="text-gray-500 font-light" data-i18n="prob_desc">جاءت فكرة Build It نتيجة مشاكل حقيقية ومتكررة في السوق الجزائري</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
+            <div class="problem-card glass rounded-2xl p-6 text-center reveal" style="transition-delay:.1s">
+                <div class="prob-icon w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-4 transition-colors">
+                    <span class="iconify text-red-400 text-2xl" data-icon="mdi:account-search-outline"></span>
+                </div>
+                <h4 class="text-sm font-semibold text-white mb-2" data-i18n="pr1">صعوبة إيجاد مقاولين موثوقين</h4>
+                <p class="text-xs text-gray-500" data-i18n="pr1d">غياب معايير واضحة لاختيار العمّال والمقاولين</p>
+            </div>
+            <div class="problem-card glass rounded-2xl p-6 text-center reveal" style="transition-delay:.2s">
+                <div class="prob-icon w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-4 transition-colors">
+                    <span class="iconify text-red-400 text-2xl" data-icon="mdi:tag-off-outline"></span>
+                </div>
+                <h4 class="text-sm font-semibold text-white mb-2" data-i18n="pr2">غياب تسعيرة واضحة</h4>
+                <p class="text-xs text-gray-500" data-i18n="pr2d">لا توجد قائمة أسعار موحدة لمواد البناء</p>
+            </div>
+            <div class="problem-card glass rounded-2xl p-6 text-center reveal" style="transition-delay:.3s">
+                <div class="prob-icon w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-4 transition-colors">
+                    <span class="iconify text-red-400 text-2xl" data-icon="mdi:trending-up"></span>
+                </div>
+                <h4 class="text-sm font-semibold text-white mb-2" data-i18n="pr3">تضخّم التكاليف</h4>
+                <p class="text-xs text-gray-500" data-i18n="pr3d">التكاليف ترتفع بشكل غير متوقع أثناء البناء</p>
+            </div>
+            <div class="problem-card glass rounded-2xl p-6 text-center reveal" style="transition-delay:.4s">
+                <div class="prob-icon w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-4 transition-colors">
+                    <span class="iconify text-red-400 text-2xl" data-icon="mdi:eye-off-outline"></span>
+                </div>
+                <h4 class="text-sm font-semibold text-white mb-2" data-i18n="pr4">ضعف المتابعة</h4>
+                <p class="text-xs text-gray-500" data-i18n="pr4d">قلة الاهتمام بمراحل التنفيذ والمتابعة الميدانية</p>
+            </div>
+            <div class="problem-card glass rounded-2xl p-6 text-center reveal" style="transition-delay:.5s">
+                <div class="prob-icon w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-4 transition-colors">
+                    <span class="iconify text-red-400 text-2xl" data-icon="mdi:alert-octagon-outline"></span>
+                </div>
+                <h4 class="text-sm font-semibold text-white mb-2" data-i18n="pr5">النصب والتحايل</h4>
+                <p class="text-xs text-gray-500" data-i18n="pr5d">حالات نصب متكررة بدون أي ضمان أو حماية قانونية</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider mx-auto max-w-5xl"></div>
+
+<!-- ========== SOLUTION ========== -->
+<section id="solution" class="py-24 lg:py-32 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+            <span class="inline-block text-xs text-brand-greenLight tracking-widest uppercase mb-4" data-i18n="sol_label">حل Build It</span>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+                <span data-i18n="sol_t1">نظام واحد</span>
+                <span class="brand-gradient" data-i18n="sol_t2"> يغطي كل شيء</span>
+            </h2>
+            <p class="text-gray-500 font-light" data-i18n="sol_desc">بدل التعامل مع عدة أطراف، يتعامل العميل مع جهة واحدة فقط</p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
+            <div class="solution-step glass rounded-2xl p-5 text-center reveal" style="transition-delay:.05s">
+                <div class="w-12 h-12 rounded-xl brand-bg flex items-center justify-center mx-auto mb-3"><span class="iconify text-white text-xl" data-icon="mdi:clipboard-text-search-outline"></span></div>
+                <div class="text-xs font-bold text-brand-greenLight mb-1">01</div>
+                <div class="text-sm font-semibold text-white" data-i18n="step1">دراسة</div>
+            </div>
+            <div class="solution-step glass rounded-2xl p-5 text-center reveal" style="transition-delay:.1s">
+                <div class="w-12 h-12 rounded-xl brand-bg flex items-center justify-center mx-auto mb-3"><span class="iconify text-white text-xl" data-icon="mdi:calculator-variant-outline"></span></div>
+                <div class="text-xs font-bold text-brand-greenLight mb-1">02</div>
+                <div class="text-sm font-semibold text-white" data-i18n="step2">ميزانية</div>
+            </div>
+            <div class="solution-step glass rounded-2xl p-5 text-center reveal" style="transition-delay:.15s">
+                <div class="w-12 h-12 rounded-xl brand-bg flex items-center justify-center mx-auto mb-3"><span class="iconify text-white text-xl" data-icon="mdi:package-variant-closed"></span></div>
+                <div class="text-xs font-bold text-brand-greenLight mb-1">03</div>
+                <div class="text-sm font-semibold text-white" data-i18n="step3">مواد</div>
+            </div>
+            <div class="solution-step glass rounded-2xl p-5 text-center reveal" style="transition-delay:.2s">
+                <div class="w-12 h-12 rounded-xl brand-bg flex items-center justify-center mx-auto mb-3"><span class="iconify text-white text-xl" data-icon="mdi:hammer-wrench"></span></div>
+                <div class="text-xs font-bold text-brand-greenLight mb-1">04</div>
+                <div class="text-sm font-semibold text-white" data-i18n="step4">تنفيذ</div>
+            </div>
+            <div class="solution-step glass rounded-2xl p-5 text-center reveal" style="transition-delay:.25s">
+                <div class="w-12 h-12 rounded-xl brand-bg-blue flex items-center justify-center mx-auto mb-3"><span class="iconify text-white text-xl" data-icon="mdi:cog-outline"></span></div>
+                <div class="text-xs font-bold text-brand-blueLight mb-1">05</div>
+                <div class="text-sm font-semibold text-white" data-i18n="step5">إدارة</div>
+            </div>
+            <div class="solution-step glass rounded-2xl p-5 text-center reveal" style="transition-delay:.3s">
+                <div class="w-12 h-12 rounded-xl brand-bg-blue flex items-center justify-center mx-auto mb-3"><span class="iconify text-white text-xl" data-icon="mdi:file-certificate-outline"></span></div>
+                <div class="text-xs font-bold text-brand-blueLight mb-1">06</div>
+                <div class="text-sm font-semibold text-white" data-i18n="step6">توثيق</div>
+            </div>
+            <div class="solution-step glass rounded-2xl p-5 text-center reveal" style="transition-delay:.35s">
+                <div class="w-12 h-12 rounded-xl brand-bg-blue flex items-center justify-center mx-auto mb-3"><span class="iconify text-white text-xl" data-icon="mdi:key-variant"></span></div>
+                <div class="text-xs font-bold text-brand-blueLight mb-1">07</div>
+                <div class="text-sm font-semibold text-white" data-i18n="step7">تسليم</div>
+            </div>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-6 mt-16">
+            <div class="glass rounded-2xl p-6 text-center reveal" style="transition-delay:.2s">
+                <span class="iconify text-brand-green text-3xl mb-3" data-icon="mdi:file-sign-outline"></span>
+                <h4 class="text-sm font-semibold text-white mb-1" data-i18n="g1">عقود قانونية</h4>
+                <p class="text-xs text-gray-500" data-i18n="g1d">كل اتفاقيات موثقة قانونياً</p>
+            </div>
+            <div class="glass rounded-2xl p-6 text-center reveal" style="transition-delay:.3s">
+                <span class="iconify text-brand-blueLight text-3xl mb-3" data-icon="mdi:receipt-text-outline"></span>
+                <h4 class="text-sm font-semibold text-white mb-1" data-i18n="g2">فواتير رسمية</h4>
+                <p class="text-xs text-gray-500" data-i18n="g2d">شفافية مالية كاملة مع فواتير معتمدة</p>
+            </div>
+            <div class="glass rounded-2xl p-6 text-center reveal" style="transition-delay:.4s">
+                <span class="iconify text-brand-green text-3xl mb-3" data-icon="mdi:calendar-check-outline"></span>
+                <h4 class="text-sm font-semibold text-white mb-1" data-i18n="g3">جدول دفعات شفاف</h4>
+                <p class="text-xs text-gray-500" data-i18n="g3d">دفعات محددة مسبقاً بدون مفاجآت</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider mx-auto max-w-5xl"></div>
+
+<!-- ========== SERVICES ========== -->
+<section id="services" class="py-24 lg:py-32 relative">
+    <div class="glow-green" style="top:0;left:-200px"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+            <span class="inline-block text-xs text-brand-greenLight tracking-widest uppercase mb-4" data-i18n="svc_label">خدماتنا</span>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+                <span data-i18n="svc_t1">نشاط المؤسسة</span>
+                <span class="brand-gradient" data-i18n="svc_t2"> في نظرة واحدة</span>
+            </h2>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="service-card glass rounded-3xl p-8 reveal" style="transition-delay:.1s">
+                <div class="svc-icon w-16 h-16 rounded-2xl bg-brand-green/10 flex items-center justify-center mb-6 transition-all duration-300">
+                    <span class="iconify text-brand-green text-3xl transition-colors" data-icon="mdi:home-group"></span>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3" data-i18n="sv1">بناء وإدارة مشاريع للغير</h3>
+                <p class="text-gray-400 font-light text-sm leading-relaxed mb-5" data-i18n="sv1d">نتولى بناء مشاريعك من الألف إلى الياء مع إدارة متكاملة وضمان الجودة في كل مرحلة.</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="text-[10px] px-3 py-1 rounded-full bg-brand-green/10 text-brand-greenLight" data-i18n="sv1t1">منازل</span>
+                    <span class="text-[10px] px-3 py-1 rounded-full bg-brand-green/10 text-brand-greenLight" data-i18n="sv1t2">عمارات</span>
+                    <span class="text-[10px] px-3 py-1 rounded-full bg-brand-green/10 text-brand-greenLight" data-i18n="sv1t3">مشاريع تجارية</span>
+                </div>
+            </div>
+            <div class="service-card glass rounded-3xl p-8 reveal" style="transition-delay:.2s">
+                <div class="svc-icon w-16 h-16 rounded-2xl bg-brand-blue/10 flex items-center justify-center mb-6 transition-all duration-300">
+                    <span class="iconify text-brand-blueLight text-3xl transition-colors" data-icon="mdi:home-refresh-outline"></span>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3" data-i18n="sv2">تجديد وبيع أو كراء العقارات</h3>
+                <p class="text-gray-400 font-light text-sm leading-relaxed mb-5" data-i18n="sv2d">نقوم بتجديد العقارات القديمة وإعادة تأهيلها ثم بيعها أو كرائها لفرص استثمارية مجدية.</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="text-[10px] px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blueLight" data-i18n="sv2t1">تجديد شامل</span>
+                    <span class="text-[10px] px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blueLight" data-i18n="sv2t2">بيع</span>
+                    <span class="text-[10px] px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blueLight" data-i18n="sv2t3">كراء</span>
+                </div>
+            </div>
+            <div class="service-card glass rounded-3xl p-8 reveal" style="transition-delay:.3s">
+                <div class="svc-icon w-16 h-16 rounded-2xl bg-brand-green/10 flex items-center justify-center mb-6 transition-all duration-300">
+                    <span class="iconify text-brand-green text-3xl transition-colors" data-icon="mdi:city-variant-outline"></span>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3" data-i18n="sv3">مشاريع إنشاء استراتيجية</h3>
+                <p class="text-gray-400 font-light text-sm leading-relaxed mb-5" data-i18n="sv3d">مشاريع استثمارية متكاملة من اختيار الأرض إلى بناء العمارة بأعلى المعايير.</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="text-[10px] px-3 py-1 rounded-full bg-brand-green/10 text-brand-greenLight" data-i18n="sv3t1">أرض + عمارة</span>
+                    <span class="text-[10px] px-3 py-1 rounded-full bg-brand-green/10 text-brand-greenLight" data-i18n="sv3t2">استثمار</span>
+                </div>
+            </div>
+            <div class="service-card glass rounded-3xl p-8 reveal" style="transition-delay:.4s">
+                <div class="svc-icon w-16 h-16 rounded-2xl bg-brand-blue/10 flex items-center justify-center mb-6 transition-all duration-300">
+                    <span class="iconify text-brand-blueLight text-3xl transition-colors" data-icon="mdi:palette-outline"></span>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3" data-i18n="sv4">تصميم وديكور</h3>
+                <p class="text-gray-400 font-light text-sm leading-relaxed mb-5" data-i18n="sv4d">خدمات التصميم الداخلي والديكور بأسلوب عصري يجمع بين الجمالية والوظيفية.</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="text-[10px] px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blueLight" data-i18n="sv4t1">تصميم داخلي</span>
+                    <span class="text-[10px] px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blueLight" data-i18n="sv4t2">ديكور</span>
+                </div>
+            </div>
+            <div class="service-card glass rounded-3xl p-8 lg:col-span-2 reveal" style="transition-delay:.5s">
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <div class="svc-icon w-16 h-16 rounded-2xl bg-brand-green/10 flex items-center justify-center mb-6 sm:mb-0 transition-all duration-300 flex-shrink-0">
+                        <span class="iconify text-brand-green text-3xl transition-colors" data-icon="mdi:scale-balance"></span>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-3" data-i18n="sv5">تسوية قانونية وتوثيق</h3>
+                        <p class="text-gray-400 font-light text-sm leading-relaxed mb-5" data-i18n="sv5d">نتولى جميع الإجراءات القانونية والتوثيقية لضمان حقوقك العقارية وفق القانون الجزائري.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] px-3 py-1 rounded-full bg-brand-green/10 text-brand-greenLight" data-i18n="sv5t1">رخص بناء</span>
+                            <span class="text-[10px] px-3 py-1 rounded-full bg-brand-green/10 text-brand-greenLight" data-i18n="sv5t2">توثيق عقود</span>
+                            <span class="text-[10px] px-3 py-1 rounded-full bg-brand-green/10 text-brand-greenLight" data-i18n="sv5t3">تسوية قانونية</span>
+                            <span class="text-[10px] px-3 py-1 rounded-full bg-brand-green/10 text-brand-greenLight" data-i18n="sv5t4">حماية حقوق</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider mx-auto max-w-5xl"></div>
+
+<!-- ========== INNOVATION ========== -->
+<section class="py-24 lg:py-32 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="reveal-left">
+                <span class="inline-block text-xs text-brand-greenLight tracking-widest uppercase mb-4" data-i18n="inn_label">الابتكار</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-6 leading-tight">
+                    <span data-i18n="inn_t1">الابتكار ليس في البناء</span><br>
+                    <span class="brand-gradient" data-i18n="inn_t2">بل في نموذج العمل</span>
+                </h2>
+                <div class="space-y-5">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-brand-green/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="iconify text-brand-green" data-icon="mdi:merge-type"></span></div>
+                        <div><h5 class="text-sm font-semibold text-white mb-1" data-i18n="inn1">دمج خدمات مشتتة في حل موحّد</h5><p class="text-xs text-gray-500" data-i18n="inn1d">نهاية التشتت — كل شيء في مكان واحد</p></div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-brand-blue/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="iconify text-brand-blueLight" data-icon="mdi:trending-up"></span></div>
+                        <div><h5 class="text-sm font-semibold text-white mb-1" data-i18n="inn2">تحويل البناء إلى استثمار</h5><p class="text-xs text-gray-500" data-i18n="inn2d">مشروعك السكني يصبح فرصة استثمارية حقيقية</p></div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-brand-green/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="iconify text-brand-green" data-icon="mdi:shield-check-outline"></span></div>
+                        <div><h5 class="text-sm font-semibold text-white mb-1" data-i18n="inn3">الشفافية والتوثيق كجزء من الخدمة</h5><p class="text-xs text-gray-500" data-i18n="inn3d">ليست إضافة، بل أساس عملنا</p></div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-brand-blue/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="iconify text-brand-blueLight" data-icon="mdi:arm-flex-outline"></span></div>
+                        <div><h5 class="text-sm font-semibold text-white mb-1" data-i18n="inn4">ذراع استثماري داخلي</h5><p class="text-xs text-gray-500" data-i18n="inn4d">بيع، كراء، تجديد — نموذج متكامل ومستدام</p></div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-brand-green/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="iconify text-brand-green" data-icon="mdi:account-group-outline"></span></div>
+                        <div><h5 class="text-sm font-semibold text-white mb-1" data-i18n="inn5">بناء شراكات مؤسسية</h5><p class="text-xs text-gray-500" data-i18n="inn5d">عقود خاصة مع قطاع التربية والدفاع</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="reveal-right">
+                <div class="relative rounded-3xl overflow-hidden aspect-square max-w-lg mx-auto">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=700&h=700&fit=crop" alt="Modern Building" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/40 to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-navy-900/30 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <div class="glass rounded-2xl p-5">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-xl brand-mixed-bg flex items-center justify-center"><span class="iconify text-white text-xl" data-icon="mdi:lightbulb-on-outline"></span></div>
+                                <div class="text-sm font-bold text-white" data-i18n="inn_quote_title">من فوضى إلى نظام</div>
+                            </div>
+                            <p class="text-xs text-gray-400 font-light" data-i18n="inn_quote">Build It يغيّر طريقة إدارة البناء في الجزائر، ويحوّلها من فوضى إلى نظام استثماري منظم وموثوق.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider mx-auto max-w-5xl"></div>
+
+<!-- ========== PARTNERSHIPS ========== -->
+<section id="partners" class="py-24 lg:py-32 relative">
+    <div class="glow-blue" style="bottom:0;right:-200px"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+            <span class="inline-block text-xs text-brand-blueLight tracking-widest uppercase mb-4" data-i18n="part_label">شراكات مؤسسية مبتكرة</span>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+                <span data-i18n="part_t1">عقود خاصة</span>
+                <span class="brand-gradient" data-i18n="part_t2"> لمهنيي القطاعين</span>
+            </h2>
+            <p class="text-gray-500 font-light" data-i18n="part_desc">عقود تفضيلية مصممة خصيصاً لفئات محددة من المجتمع</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div class="partner-card glass rounded-3xl p-8 reveal" style="transition-delay:.1s">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-16 h-16 rounded-2xl brand-bg-blue flex items-center justify-center"><span class="iconify text-white text-3xl" data-icon="mdi:school-outline"></span></div>
+                    <div><h3 class="text-xl font-bold text-white" data-i18n="part1_title">قطاع التربية</h3><p class="text-xs text-gray-400" data-i18n="part1_sub">مهنيو التعليم</p></div>
+                </div>
+                <p class="text-gray-400 font-light text-sm leading-relaxed mb-6" data-i18n="part1_desc">عقود خاصة تمكّن مهنيي قطاع التربية من بناء منازلهم العائلية بشروط استثنائية وضمان قانوني كامل.</p>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3"><span class="iconify text-brand-green text-lg" data-icon="mdi:check-circle"></span><span class="text-sm text-gray-300" data-i18n="part1_f1">أسعار تفضيلية خاصة</span></div>
+                    <div class="flex items-center gap-3"><span class="iconify text-brand-green text-lg" data-icon="mdi:check-circle"></span><span class="text-sm text-gray-300" data-i18n="part1_f2">نظام تقسيط مرن</span></div>
+                    <div class="flex items-center gap-3"><span class="iconify text-brand-green text-lg" data-icon="mdi:check-circle"></span><span class="text-sm text-gray-300" data-i18n="part1_f3">إدارة كاملة للمشروع</span></div>
+                    <div class="flex items-center gap-3"><span class="iconify text-brand-green text-lg" data-icon="mdi:check-circle"></span><span class="text-sm text-gray-300" data-i18n="part1_f4">ضمان قانوني شامل</span></div>
+                </div>
+            </div>
+            <div class="partner-card glass rounded-3xl p-8 reveal" style="transition-delay:.2s">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-16 h-16 rounded-2xl brand-bg flex items-center justify-center"><span class="iconify text-white text-3xl" data-icon="mdi:shield-star-outline"></span></div>
+                    <div><h3 class="text-xl font-bold text-white" data-i18n="part2_title">قطاع الدفاع</h3><p class="text-xs text-gray-400" data-i18n="part2_sub">مهنيو الأمن الوطني</p></div>
+                </div>
+                <p class="text-gray-400 font-light text-sm leading-relaxed mb-6" data-i18n="part2_desc">عقود استثنائية لمهنيي قطاع الدفاع تشمل كامل الخدمات من الدراسة حتى التسليم بشروط ميسّرة.</p>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3"><span class="iconify text-brand-green text-lg" data-icon="mdi:check-circle"></span><span class="text-sm text-gray-300" data-i18n="part2_f1">أسعار تفضيلية خاصة</span></div>
+                    <div class="flex items-center gap-3"><span class="iconify text-brand-green text-lg" data-icon="mdi:check-circle"></span><span class="text-sm text-gray-300" data-i18n="part2_f2">نظام تقسيط مرن</span></div>
+                    <div class="flex items-center gap-3"><span class="iconify text-brand-green text-lg" data-icon="mdi:check-circle"></span><span class="text-sm text-gray-300" data-i18n="part2_f3">إدارة كاملة للمشروع</span></div>
+                    <div class="flex items-center gap-3"><span class="iconify text-brand-green text-lg" data-icon="mdi:check-circle"></span><span class="text-sm text-gray-300" data-i18n="part2_f4">ضمان قانوني شامل</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider mx-auto max-w-5xl"></div>
+
+<!-- ========== CONTACT ========== -->
+<section id="contact" class="py-24 lg:py-32 relative">
+    <div class="glow-green" style="bottom:-100px;left:50%;transform:translateX(-50%)"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+            <span class="inline-block text-xs text-brand-greenLight tracking-widest uppercase mb-4" data-i18n="ct_label">تواصل معنا</span>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+                <span data-i18n="ct_t1">ابدأ مشروعك</span>
+                <span class="brand-gradient" data-i18n="ct_t2"> مع Build It</span>
+            </h2>
+            <p class="text-gray-500 font-light" data-i18n="ct_desc">نحن جاهزون لدراسة مشروعك وتقديم أفضل الحلول</p>
+        </div>
+        <div class="grid lg:grid-cols-5 gap-8">
+            <div class="lg:col-span-2 space-y-4 reveal-left">
+                <a href="https://wa.me/213549333904" target="_blank" class="flex items-center gap-4 glass rounded-2xl p-5 group hover:border-green-500/30 transition-all">
+                    <div class="w-14 h-14 rounded-2xl bg-green-500/10 flex items-center justify-center flex-shrink-0 group-hover:bg-green-500/20 transition-colors"><span class="iconify text-green-400 text-2xl" data-icon="mdi:whatsapp"></span></div>
+                    <div><div class="text-sm font-semibold text-white" data-i18n="ct_wa">واتساب</div><div class="text-sm text-gray-400 font-inter" dir="ltr">0549333904</div></div>
+                    <span class="iconify text-gray-600 group-hover:text-green-400 transition-colors mr-auto" data-icon="mdi:arrow-top-left"></span>
+                </a>
+                <a href="tel:+213549333904" class="flex items-center gap-4 glass rounded-2xl p-5 group hover:border-brand-green/30 transition-all">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-green/10 flex items-center justify-center flex-shrink-0 group-hover:bg-brand-green/20 transition-colors"><span class="iconify text-brand-green text-2xl" data-icon="mdi:phone-outline"></span></div>
+                    <div><div class="text-sm font-semibold text-white" data-i18n="ct_ph">هاتف</div><div class="text-sm text-gray-400 font-inter" dir="ltr">0549333904</div></div>
+                    <span class="iconify text-gray-600 group-hover:text-brand-green transition-colors mr-auto" data-icon="mdi:arrow-top-left"></span>
+                </a>
+                <a href="mailto:Build.dz@gmail.com" class="flex items-center gap-4 glass rounded-2xl p-5 group hover:border-brand-blue/30 transition-all">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-blue/10 flex items-center justify-center flex-shrink-0 group-hover:bg-brand-blue/20 transition-colors"><span class="iconify text-brand-blueLight text-2xl" data-icon="mdi:email-outline"></span></div>
+                    <div><div class="text-sm font-semibold text-white" data-i18n="ct_em">البريد الإلكتروني</div><div class="text-sm text-gray-400 font-inter" dir="ltr">Build.dz@gmail.com</div></div>
+                    <span class="iconify text-gray-600 group-hover:text-brand-blueLight transition-colors mr-auto" data-icon="mdi:arrow-top-left"></span>
+                </a>
+                <div class="flex items-center gap-4 glass rounded-2xl p-5">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-green/10 flex items-center justify-center flex-shrink-0"><span class="iconify text-brand-green text-2xl" data-icon="mdi:map-marker-outline"></span></div>
+                    <div><div class="text-sm font-semibold text-white" data-i18n="ct_loc">الموقع</div><div class="text-sm text-gray-400" data-i18n="ct_locd">الجزائر</div></div>
+                </div>
+            </div>
+            <div class="lg:col-span-3 reveal-right">
+                <form class="glass rounded-3xl p-8 lg:p-10" id="contactForm" onsubmit="handleSubmit(event)">
+                    <div class="grid sm:grid-cols-2 gap-5 mb-5">
+                        <div>
+                            <label class="text-xs text-gray-400 mb-2 block" data-i18n="f_name">الاسم الكامل</label>
+                            <input type="text" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand-green/50 transition-colors" data-i18n-placeholder="f_name_ph" placeholder="أدخل اسمك">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 mb-2 block" data-i18n="f_phone">رقم الهاتف</label>
+                            <input type="tel" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand-green/50 transition-colors font-inter" dir="ltr" placeholder="0XXX XX XX XX">
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="text-xs text-gray-400 mb-2 block" data-i18n="f_service">الخدمة المطلوبة</label>
+                        <select required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-gray-400 focus:outline-none focus:border-brand-green/50 transition-colors appearance-none cursor-pointer" style="background-image:url('data:image/svg+xml;utf8,<svg fill=\"%239CA3AF\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 10l5 5 5-5z\"/></svg>');background-repeat:no-repeat;background-position:left 12px center;background-size:20px;">
+                            <option value="" data-i18n="f_service_ph">اختر الخدمة</option>
+                            <option value="build" data-i18n="f_o1">بناء وإدارة مشاريع</option>
+                            <option value="renovate" data-i18n="f_o2">تجديد وبيع/كراء</option>
+                            <option value="strategic" data-i18n="f_o3">مشاريع استراتيجية</option>
+                            <option value="design" data-i18n="f_o4">تصميم وديكور</option>
+                            <option value="legal" data-i18n="f_o5">تسوية قانونية</option>
+                            <option value="partner" data-i18n="f_o6">شراكة مؤسسية</option>
+                            <option value="other" data-i18n="f_o7">أخرى</option>
+                        </select>
+                    </div>
+                    <div class="mb-6">
+                        <label class="text-xs text-gray-400 mb-2 block" data-i18n="f_msg">تفاصيل المشروع</label>
+                        <textarea rows="4" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand-green/50 transition-colors resize-none" data-i18n-placeholder="f_msg_ph" placeholder="اكتب تفاصيل مشروعك هنا..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-brand rounded-xl px-8 py-4 text-sm w-full">
+                        <span class="flex items-center justify-center gap-2">
+                            <span class="iconify" data-icon="mdi:send-outline"></span>
+                            <span data-i18n="f_submit">إرسال الطلب</span>
+                        </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="border-t border-white/5 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-3 gap-8 items-center">
+            <div class="text-center md:text-start">
+                <div class="flex items-center gap-3 justify-center md:justify-start mb-3">
+                    <img src="https://z-cdn-media.chatglm.cn/files/8809be51-f2b2-4478-8c37-6072b16c5c42.png?auth_key=1876898942-b89076bee84542f7877636c35e962dc1-0-7b17500daed1adb4fd0a3291bc36e367" alt="Build It" class="h-10 rounded-lg" onerror="this.style.display='none'">
+                </div>
+                <p class="text-xs text-gray-600" data-i18n="ft_desc">من الصفر إلى المفتاح — حلول متكاملة في الإنشاء والتعمير</p>
+            </div>
+            <div class="flex items-center justify-center gap-6">
+                <a href="#about" class="text-xs text-gray-500 hover:text-brand-green transition-colors" data-i18n="nav_about">عن بيلديت</a>
+                <a href="#services" class="text-xs text-gray-500 hover:text-brand-green transition-colors" data-i18n="nav_services">خدماتنا</a>
+                <a href="#partners" class="text-xs text-gray-500 hover:text-brand-green transition-colors" data-i18n="nav_partners">الشراكات</a>
+                <a href="#contact" class="text-xs text-gray-500 hover:text-brand-green transition-colors" data-i18n="nav_contact">تواصل</a>
+            </div>
+            <div class="text-center md:text-end">
+                <p class="text-xs text-gray-600" data-i18n="ft_copy">© 2025 Build It. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- WhatsApp Float -->
+<a href="https://wa.me/213549333904" target="_blank" class="whatsapp-float">
+    <span class="iconify text-white text-3xl" data-icon="mdi:whatsapp"></span>
+</a>
+
+<!-- Toast -->
+<div class="toast fixed bottom-28 left-1/2 -translate-x-1/2 z-[100] glass rounded-2xl px-6 py-4 flex items-center gap-3" id="toast">
+    <span class="iconify text-brand-green text-xl" data-icon="mdi:check-circle-outline"></span>
+    <span class="text-sm text-white" id="toastMsg" data-i18n="toast">تم إرسال طلبك بنجاح!</span>
+</div>
+
+<script>
+const T={
+ar:{
+    nav_home:"الرئيسية",nav_about:"عن بيلديت",nav_problems:"المشاكل",nav_services:"خدماتنا",nav_partners:"الشراكات",nav_contact:"تواصل",nav_consult:"استشارة",
+    hero_badge:"مؤسسة ناشئة مبتكرة في الجزائر",hero_t1:"من الصفر",hero_t2:"إلى المفتاح",hero_sub:"Build It — حلول متكاملة في الإنشاء والتعمير والاستثمار العقاري",hero_desc:"بدل التعامل مع عدة أطراف، تعامل مع جهة واحدة. عقود قانونية، فواتير رسمية، وجدول دفعات شفاف.",hero_cta1:"تواصل الآن",hero_cta2:"اكتشف خدماتنا",
+    s_projects:"مشروع مُنجز",s_clients:"عميل راضٍ",s_satisfaction:"% رضا العملاء",
+    scroll:"اكتشف المزيد",badge_title:"عقود قانونية",badge_sub:"فواتير رسمية",badge2_title:"جدول دفعات",badge2_sub:"شفاف ومحدد",
+    about_label:"عن بيلديت",about_t1:"نغيّر طريقة",about_t2:"إدارة البناء في الجزائر",about_p1:"Build It هي مؤسسة ناشئة مبتكرة في مجال الإنشاء والتعمير والاستثمار العقاري، تقدّم حلولًا متكاملة من الصفر إلى المفتاح، موجّهة لأصحاب المنازل العاديين، المستثمرين، والمُرقّين العقاريين.",about_p2:"الابتكار في Build It ليس في البناء، بل في نموذج العمل: دمج خدمات مشتتة في حل موحّد، وتحويل البناء إلى مشروع يُدار كاستثمار.",
+    af1:"حل موحّد",af1d:"كل الخدمات في مكان واحد",af2:"استثمار ذكي",af2d:"البناء كفرصة استثمارية",af3:"شفافية كاملة",af3d:"توثيق كل خطوة",af4:"شراكات مؤسسية",af4d:"قطاع التربية والدفاع",
+    about_card_sub:"إنشاء • تعمير • استثمار",
+    prob_label:"المشاكل الحقيقية",prob_t1:"مشاكل يعاني منها",prob_t2:" كل من يبني",prob_desc:"جاءت فكرة Build It نتيجة مشاكل حقيقية ومتكررة في السوق الجزائري",
+    pr1:"صعوبة إيجاد مقاولين موثوقين",pr1d:"غياب معايير واضحة لاختيار العمّال والمقاولين",pr2:"غياب تسعيرة واضحة",pr2d:"لا توجد قائمة أسعار موحدة لمواد البناء",pr3:"تضخّم التكاليف",pr3d:"التكاليف ترتفع بشكل غير متوقع أثناء البناء",pr4:"ضعف المتابعة",pr4d:"قلة الاهتمام بمراحل التنفيذ والمتابعة الميدانية",pr5:"النصب والتحايل",pr5d:"حالات نصب متكررة بدون أي ضمان أو حماية قانونية",
+    sol_label:"حل Build It",sol_t1:"نظام واحد",sol_t2:" يغطي كل شيء",sol_desc:"بدل التعامل مع عدة أطراف، يتعامل العميل مع جهة واحدة فقط",
+    step1:"دراسة",step2:"ميزانية",step3:"مواد",step4:"تنفيذ",step5:"إدارة",step6:"توثيق",step7:"تسليم",
+    g1:"عقود قانونية",g1d:"كل اتفاقيات موثقة قانونياً",g2:"فواتير رسمية",g2d:"شفافية مالية كاملة مع فواتير معتمدة",g3:"جدول دفعات شفاف",g3d:"دفعات محددة مسبقاً بدون مفاجآت",
+    svc_label:"خدماتنا",svc_t1:"نشاط المؤسسة",svc_t2:" في نظرة واحدة",
+    sv1:"بناء وإدارة مشاريع للغير",sv1d:"نتولى بناء مشاريعك من الألف إلى الياء مع إدارة متكاملة وضمان الجودة في كل مرحلة.",sv1t1:"منازل",sv1t2:"عمارات",sv1t3:"مشاريع تجارية",
+    sv2:"تجديد وبيع أو كراء العقارات",sv2d:"نقوم بتجديد العقارات القديمة وإعادة تأهيلها ثم بيعها أو كرائها لفرص استثمارية مجدية.",sv2t1:"تجديد شامل",sv2t2:"بيع",sv2t3:"كراء",
+    sv3:"مشاريع إنشاء استراتيجية",sv3d:"مشاريع استثمارية متكاملة من اختيار الأرض إلى بناء العمارة بأعلى المعايير.",sv3t1:"أرض + عمارة",sv3t2:"استثمار",
+    sv4:"تصميم وديكور",sv4d:"خدمات التصميم الداخلي والديكور بأسلوب عصري يجمع بين الجمالية والوظيفية.",sv4t1:"تصميم داخلي",sv4t2:"ديكور",
+    sv5:"تسوية قانونية وتوثيق",sv5d:"نتولى جميع الإجراءات القانونية والتوثيقية لضمان حقوقك العقارية وفق القانون الجزائري.",sv5t1:"رخص بناء",sv5t2:"توثيق عقود",sv5t3:"تسوية قانونية",sv5t4:"حماية حقوق",
+    inn_label:"الابتكار",inn_t1:"الابتكار ليس في البناء",inn_t2:"بل في نموذج العمل",
+    inn1:"دمج خدمات مشتتة في حل موحّد",inn1d:"نهاية التشتت — كل شيء في مكان واحد",inn2:"تحويل البناء إلى استثمار",inn2d:"مشروعك السكني يصبح فرصة استثمارية حقيقية",inn3:"الشفافية والتوثيق كجزء من الخدمة",inn3d:"ليست إضافة، بل أساس عملنا",inn4:"ذراع استثماري داخلي",inn4d:"بيع، كراء، تجديد — نموذج متكامل ومستدام",inn5:"بناء شراكات مؤسسية",inn5d:"عقود خاصة مع قطاع التربية والدفاع",
+    inn_quote_title:"من فوضى إلى نظام",inn_quote:"Build It يغيّر طريقة إدارة البناء في الجزائر، ويحوّلها من فوضى إلى نظام استثماري منظم وموثوق.",
+    part_label:"شراكات مؤسسية مبتكرة",part_t1:"عقود خاصة",part_t2:" لمهنيي القطاعين",part_desc:"عقود تفضيلية مصممة خصيصاً لفئات محددة من المجتمع",
+    part1_title:"قطاع التربية",part1_sub:"مهنيو التعليم",part1_desc:"عقود خاصة تمكّن مهنيي قطاع التربية من بناء منازلهم العائلية بشروط استثنائية وضمان قانوني كامل.",part1_f1:"أسعار تفضيلية خاصة",part1_f2:"نظام تقسيط مرن",part1_f3:"إدارة كاملة للمشروع",part1_f4:"ضمان قانوني شامل",
+    part2_title:"قطاع الدفاع",part2_sub:"مهنيو الأمن الوطني",part2_desc:"عقود استثنائية لمهنيي قطاع الدفاع تشمل كامل الخدمات من الدراسة حتى التسليم بشروط ميسّرة.",part2_f1:"أسعار تفضيلية خاصة",part2_f2:"نظام تقسيط مرن",part2_f3:"إدارة كاملة للمشروع",part2_f4:"ضمان قانوني شامل",
+    ct_label:"تواصل معنا",ct_t1:"ابدأ مشروعك",ct_t2:" مع Build It",ct_desc:"نحن جاهزون لدراسة مشروعك وتقديم أفضل الحلول",
+    ct_wa:"واتساب",ct_ph:"هاتف",ct_em:"البريد الإلكتروني",ct_loc:"الموقع",ct_locd:"الجزائر",
+    f_name:"الاسم الكامل",f_name_ph:"أدخل اسمك",f_phone:"رقم الهاتف",f_service:"الخدمة المطلوبة",f_service_ph:"اختر الخدمة",
+    f_o1:"بناء وإدارة مشاريع",f_o2:"تجديد وبيع/كراء",f_o3:"مشاريع استراتيجية",f_o4:"تصميم وديكور",f_o5:"تسوية قانونية",f_o6:"شراكة مؤسسية",f_o7:"أخرى",
+    f_msg:"تفاصيل المشروع",f_msg_ph:"اكتب تفاصيل مشروعك هنا...",f_submit:"إرسال الطلب",
+    toast:"تم إرسال طلبك بنجاح! سنتواصل معك قريباً.",ft_desc:"من الصفر إلى المفتاح — حلول متكاملة في الإنشاء والتعمير",ft_copy:"© 2025 Build It. جميع الحقوق محفوظة."
+},
+fr:{
+    nav_home:"Accueil",nav_about:"À propos",nav_problems:"Problèmes",nav_services:"Services",nav_partners:"Partenariats",nav_contact:"Contact",nav_consult:"Consultation",
+    hero_badge:"Startup innovante en Algérie",hero_t1:"De Zéro",hero_t2:"à la Clé",hero_sub:"Build It — Solutions complètes en construction, bâtiment et investissement immobilier",hero_desc:"Au lieu de gérer avec plusieurs parties, gérez avec une seule. Contrats légaux, factures officielles et échéancier transparent.",hero_cta1:"Contactez-nous",hero_cta2:"Découvrez nos services",
+    s_projects:"Projets réalisés",s_clients:"Clients satisfaits",s_satisfaction:"% Satisfaction",
+    scroll:"Découvrir plus",badge_title:"Contrats légaux",badge_sub:"Factures officielles",badge2_title:"Échéancier",badge2_sub:"Transparent et fixe",
+    about_label:"À propos",about_t1:"Nous changeons la façon",about_t2:"de gérer la construction en Algérie",about_p1:"Build It est une startup innovante dans la construction, le bâtiment et l'investissement immobilier, offrant des solutions complètes de zéro à la clé.",about_p2:"L'innovation de Build It n'est pas dans la construction, mais dans le modèle d'activité: fusionner des services dispersés en une solution unifiée.",
+    af1:"Solution unifiée",af1d:"Tous les services en un seul endroit",af2:"Investissement intelligent",af2d:"La construction comme opportunité",af3:"Transparence totale",af3d:"Chaque étape documentée",af4:"Partenariats institutionnels",af4d:"Secteurs de l'éducation et de la défense",
+    about_card_sub:"Construction • Bâtiment • Investissement",
+    prob_label:"Les vrais problèmes",prob_t1:"Des problèmes que vit",prob_t2:" tout constructeur",prob_desc:"L'idée de Build It est née de problèmes réels et récurrents du marché algérien",
+    pr1:"Difficulté de trouver des entrepreneurs fiables",pr1d:"Absence de critères clairs pour choisir les ouvriers",pr2:"Absence de tarification claire",pr2d:"Pas de liste de prix unifiée pour les matériaux",pr3:"Inflation des coûts",pr3d:"Les coûts augmentent de manière inattendue",pr4:"Faible suivi",pr4d:"Manque d'attention aux phases d'exécution",pr5:"Arnaque et tromperie",pr5d:"Cas d'arnaques récurrents sans garantie légale",
+    sol_label:"Solution Build It",sol_t1:"Un seul système",sol_t2:" pour tout couvrir",sol_desc:"Au lieu de gérer avec plusieurs parties, le client gère avec une seule entité",
+    step1:"Étude",step2:"Budget",step3:"Matériaux",step4:"Exécution",step5:"Gestion",step6:"Documentation",step7:"Livraison",
+    g1:"Contrats légaux",g1d:"Tous les accords légalement documentés",g2:"Factures officielles",g2d:"Transparence financière complète",g3:"Échéancier transparent",g3d:"Paiements prédéfinis sans surprise",
+    svc_label:"Nos services",svc_t1:"Activités de l'entreprise",svc_t2:" en un coup d'œil",
+    sv1:"Construction et gestion de projets",sv1d:"Nous gérons vos projets de A à Z avec une gestion intégrée.",sv1t1:"Maisons",sv1t2:"Immeubles",sv1t3:"Projets commerciaux",
+    sv2:"Rénovation et vente/location",sv2d:"Nous rénovons les biens anciens puis les vendons ou louons.",sv2t1:"Rénovation complète",sv2t2:"Vente",sv2t3:"Location",
+    sv3:"Projets de création stratégique",sv3d:"Projets d'investissement intégrés du choix du terrain à la construction.",sv3t1:"Terrain + Immeuble",sv3t2:"Investissement",
+    sv4:"Design et décoration",sv4d:"Services de design intérieur et décoration alliant esthétique et fonctionnalité.",sv4t1:"Design intérieur",sv4t2:"Décoration",
+    sv5:"Règlementation légale et documentation",sv5d:"Nous gérons toutes les procédures légales pour garantir vos droits immobiliers.",sv5t1:"Permis de construire",sv5t2:"Documentation des contrats",sv5t3:"Règlementation légale",sv5t4:"Protection des droits",
+    inn_label:"Innovation",inn_t1:"L'innovation n'est pas dans la construction",inn_t2:"mais dans le modèle d'activité",
+    inn1:"Fusionner des services dispersés",inn1d:"Fin de la dispersion — tout en un seul endroit",inn2:"Transformer la construction en investissement",inn2d:"Votre projet résidentiel devient une vraie opportunité",inn3:"Transparence et documentation comme service",inn3d:"Pas un ajout, mais la base de notre travail",inn4:"Bras d'investissement interne",inn4d:"Vente, location, rénovation — modèle intégré",inn5:"Construire des partenariats institutionnels",inn5d:"Contrats spéciaux avec l'éducation et la défense",
+    inn_quote_title:"Du chaos au système",inn_quote:"Build It change la façon de gérer la construction en Algérie, la transformant du chaos en un système organisé et fiable.",
+    part_label:"Partenariats institutionnels innovants",part_t1:"Contrats spéciaux",part_t2:" pour les professionnels",part_desc:"Contrats préférentiels conçus pour des catégories spécifiques",
+    part1_title:"Secteur de l'Éducation",part1_sub:"Professionnels de l'enseignement",part1_desc:"Contrats spéciaux permettant aux professionnels de l'éducation de construire leurs maisons familiales.",part1_f1:"Prix préférentiels spéciaux",part1_f2:"Système de facilités",part1_f3:"Gestion complète du projet",part1_f4:"Garantie légale complète",
+    part2_title:"Secteur de la Défense",part2_sub:"Professionnels de la sécurité nationale",part2_desc:"Contrats exceptionnels pour les professionnels de la défense couvrant tous les services.",part2_f1:"Prix préférentiels spéciaux",part2_f2:"Système de facilités",part2_f3:"Gestion complète du projet",part2_f4:"Garantie légale complète",
+    ct_label:"Contactez-nous",ct_t1:"Démarrez votre projet",ct_t2:" avec Build It",ct_desc:"Nous sommes prêts à étudier votre projet",
+    ct_wa:"WhatsApp",ct_ph:"Téléphone",ct_em:"Email",ct_loc:"Localisation",ct_locd:"Algérie",
+    f_name:"Nom complet",f_name_ph:"Entrez votre nom",f_phone:"Téléphone",f_service:"Service demandé",f_service_ph:"Choisir le service",
+    f_o1:"Construction et gestion",f_o2:"Rénovation et vente/location",f_o3:"Projets stratégiques",f_o4:"Design et décoration",f_o5:"Règlementation légale",f_o6:"Partenariat institutionnel",f_o7:"Autre",
+    f_msg:"Détails du projet",f_msg_ph:"Décrivez votre projet ici...",f_submit:"Envoyer la demande",
+    toast:"Votre demande a été envoyée avec succès!",ft_desc:"De zéro à la clé — Solutions complètes en construction",ft_copy:"© 2025 Build It. Tous droits réservés."
+},
+en:{
+    nav_home:"Home",nav_about:"About",nav_problems:"Problems",nav_services:"Services",nav_partners:"Partnerships",nav_contact:"Contact",nav_consult:"Consultation",
+    hero_badge:"Innovative startup in Algeria",hero_t1:"From Zero",hero_t2:"to Turnkey",hero_sub:"Build It — Complete solutions in construction, building, and real estate investment",hero_desc:"Instead of dealing with multiple parties, deal with one. Legal contracts, official invoices, and a transparent payment schedule.",hero_cta1:"Contact Now",hero_cta2:"Discover Our Services",
+    s_projects:"Projects Delivered",s_clients:"Satisfied Clients",s_satisfaction:"% Satisfaction",
+    scroll:"Discover more",badge_title:"Legal Contracts",badge_sub:"Official Invoices",badge2_title:"Payment Schedule",badge2_sub:"Transparent & Fixed",
+    about_label:"About Us",about_t1:"We're changing the way",about_t2:"construction is managed in Algeria",about_p1:"Build It is an innovative startup in construction, building, and real estate investment, offering complete turnkey solutions for homeowners, investors, and developers.",about_p2:"The innovation in Build It is not in construction, but in the business model: merging scattered services into a unified solution.",
+    af1:"Unified Solution",af1d:"All services in one place",af2:"Smart Investment",af2d:"Construction as an opportunity",af3:"Full Transparency",af3d:"Every step documented",af4:"Institutional Partnerships",af4d:"Education & Defense sectors",
+    about_card_sub:"Construction • Building • Investment",
+    prob_label:"The Real Problems",prob_t1:"Problems faced by",prob_t2:" everyone who builds",prob_desc:"Build It was born from real and recurring problems in the Algerian market",
+    pr1:"Hard to find reliable contractors",pr1d:"No clear criteria for selecting workers",pr2:"No clear pricing",pr2d:"No unified price list for materials",pr3:"Cost inflation",pr3d:"Costs rise unexpectedly during construction",pr4:"Poor follow-up",pr4d:"Lack of attention to execution phases",pr5:"Fraud and scams",pr5d:"Recurring fraud cases without legal protection",
+    sol_label:"Build It Solution",sol_t1:"One system",sol_t2:" that covers everything",sol_desc:"Instead of dealing with multiple parties, the client deals with a single entity",
+    step1:"Study",step2:"Budget",step3:"Materials",step4:"Execution",step5:"Management",step6:"Documentation",step7:"Delivery",
+    g1:"Legal Contracts",g1d:"All agreements legally documented",g2:"Official Invoices",g2d:"Complete financial transparency",g3:"Transparent Payment Schedule",g3d:"Pre-defined payments without surprises",
+    svc_label:"Our Services",svc_t1:"Company Activities",svc_t2:" at a Glance",
+    sv1:"Construction & Project Management",sv1d:"We handle your projects from A to Z with integrated management.",sv1t1:"Houses",sv1t2:"Buildings",sv1t3:"Commercial Projects",
+    sv2:"Renovation & Sale/Rental",sv2d:"We renovate old properties for sale or rent.",sv2t1:"Full Renovation",sv2t2:"Sale",sv2t3:"Rental",
+    sv3:"Strategic Creation Projects",sv3d:"Integrated investment projects from land selection to building.",sv3t1:"Land + Building",sv3t2:"Investment",
+    sv4:"Design & Decoration",sv4d:"Interior design and decoration combining aesthetics with functionality.",sv4t1:"Interior Design",sv4t2:"Decoration",
+    sv5:"Legal Settlement & Documentation",sv5d:"We handle all legal procedures to protect your property rights.",sv5t1:"Building Permits",sv5t2:"Contract Documentation",sv5t3:"Legal Settlement",sv5t4:"Rights Protection",
+    inn_label:"Innovation",inn_t1:"Innovation is not in construction",inn_t2:"but in the business model",
+    inn1:"Merging scattered services into one",inn1d:"End of fragmentation — everything in one place",inn2:"Turning construction into investment",inn2d:"Your project becomes a real investment opportunity",inn3:"Transparency & documentation as a service",inn3d:"Not an add-on, but the foundation",inn4:"Internal investment arm",inn4d:"Sale, rental, renovation — integrated model",inn5:"Building institutional partnerships",inn5d:"Special contracts with Education & Defense",
+    inn_quote_title:"From Chaos to System",inn_quote:"Build It changes the way construction is managed in Algeria, transforming it from chaos into an organized investment system.",
+    part_label:"Innovative Institutional Partnerships",part_t1:"Special Contracts",part_t2:" for Sector Professionals",part_desc:"Preferential contracts specially designed for specific categories",
+    part1_title:"Education Sector",part1_sub:"Teaching Professionals",part1_desc:"Special contracts enabling education professionals to build their family homes under exceptional conditions.",part1_f1:"Special preferential prices",part1_f2:"Flexible installment system",part1_f3:"Complete project management",part1_f4:"Comprehensive legal guarantee",
+    part2_title:"Defense Sector",part2_sub:"National Security Professionals",part2_desc:"Exceptional contracts for defense professionals covering all services.",part2_f1:"Special preferential prices",part2_f2:"Flexible installment system",part2_f3:"Complete project management",part2_f4:"Comprehensive legal guarantee",
+    ct_label:"Contact Us",ct_t1:"Start Your Project",ct_t2:" with Build It",ct_desc:"We're ready to study your project and provide the best solutions",
+    ct_wa:"WhatsApp",ct_ph:"Phone",ct_em:"Email",ct_loc:"Location",ct_locd:"Algeria",
+    f_name:"Full Name",f_name_ph:"Enter your name",f_phone:"Phone Number",f_service:"Required Service",f_service_ph:"Choose service",
+    f_o1:"Construction & Management",f_o2:"Renovation & Sale/Rental",f_o3:"Strategic Projects",f_o4:"Design & Decoration",f_o5:"Legal Settlement",f_o6:"Institutional Partnership",f_o7:"Other",
+    f_msg:"Project Details",f_msg_ph:"Write your project details here...",f_submit:"Send Request",
+    toast:"Your request has been sent successfully!",ft_desc:"From zero to turnkey — Complete solutions in construction",ft_copy:"© 2025 Build It. All rights reserved."
+}};
+
+let lang='ar';
+const LOGO_URL='https://z-cdn-media.chatglm.cn/files/8809be51-f2b2-4478-8c37-6072b16c5c42.png?auth_key=1876898942-b89076bee84542f7877636c35e962dc1-0-7b17500daed1adb4fd0a3291bc36e367';
+
+function setLang(l){
+    lang=l;
+    const h=document.documentElement;
+    h.setAttribute('dir',l==='ar'?'rtl':'ltr');
+    h.setAttribute('lang',l);
+    document.body.style.fontFamily=l==='ar'?"'Noto Kufi Arabic', sans-serif":"'Inter', sans-serif";
+    document.querySelectorAll('.lang-btn').forEach(b=>{b.classList.remove('active');b.classList.add('text-gray-400');if(b.dataset.lang===l){b.classList.add('active');b.classList.remove('text-gray-400');}});
+    const t=T[l];
+    document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(t[k])el.textContent=t[k];});
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{const k=el.dataset.i18nPlaceholder;if(t[k])el.placeholder=t[k];});
+    document.querySelectorAll('select').forEach(s=>s.style.backgroundPosition=l==='ar'?'left 12px center':'right 12px center');
+}
+
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+function handleSubmit(e){e.preventDefault();const t=document.getElementById('toast');t.classList.add('show');e.target.reset();setTimeout(()=>t.classList.remove('show'),4000);}
+
+function createParticles(){
+    const c=document.getElementById('particles');
+    for(let i=0;i<25;i++){
+        const p=document.createElement('div');p.className='particle';
+        const color=i%2===0?'rgba(34,197,94,0.25)':'rgba(59,130,246,0.2)';
+        Object.assign(p.style,{left:Math.random()*100+'%',width:(Math.random()*3+1)+'px',height:(Math.random()*3+1)+'px',background:color,animationDuration:(Math.random()*15+10)+'s',animationDelay:(Math.random()*10)+'s'});
+        c.appendChild(p);
+    }
+}
+
+function onScroll(){
+    document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el=>{
+        if(el.getBoundingClientRect().top<window.innerHeight*0.88)el.classList.add('active');
+    });
+    document.querySelectorAll('[data-count]').forEach(el=>{
+        if(el.getBoundingClientRect().top<window.innerHeight*0.9&&!el.dataset.animated){
+            el.dataset.animated='true';const target=parseInt(el.dataset.count),dur=2000,start=performance.now();
+            (function up(now){const p=Math.min((now-start)/dur,1),e=1-Math.pow(1-p,3);el.textContent=Math.floor(e*target).toLocaleString()+'+';if(p<1)requestAnimationFrame(up);})(start);
+        }
+    });
+    const nav=document.getElementById('navbar');
+    nav.style.background=window.scrollY>50?'rgba(10,22,40,0.95)':'rgba(10,22,40,0.88)';
+}
+
+window.addEventListener('scroll',onScroll);
+window.addEventListener('load',()=>{createParticles();onScroll();setTimeout(onScroll,500);});
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',function(e){e.preventDefault();const t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'});}));
+</script>
+</body>
+</html>
